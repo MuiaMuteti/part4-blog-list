@@ -49,6 +49,16 @@ test('a blog is added', async () => {
     assert(titles.includes(newBlog.title))
 })
 
+test('missing likes property defaults to zero', async () => {
+    const newBlog = {
+        title: "Net Runners",
+        author: "Arasaka",
+        url: "cyberpunk.com"
+    }
+    const response = await api.post('/api/blogs').send(newBlog)
+    assert.strictEqual(response.body.likes, 0)
+})
+
 after(async () => {
     await mongoose.connection.close()
 })
