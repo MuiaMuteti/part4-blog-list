@@ -29,6 +29,26 @@ test('blog has id property', async () => {
     })
 })
 
+test('a blog is added', async () => {
+    const newBlog = {
+        title: "Net Runners",
+        author: "Arasaka",
+        url: "cyberpunk.com",
+        likes: 100000
+    }
+
+    await api.post('/api/blogs')
+            .send(newBlog)
+            .expect(201)
+            .expect('Content-Type', /application\/json/)
+
+    const blogsDB = await helper.blogsInDB()
+    assert.strictEqual(blogsDB.length, helper.initialBlogs.length + 1)
+
+    const titles = blogsDB.map(blog => blog.title)
+    assert(titles.includes(newBlog.title))
+})
+
 after(async () => {
     await mongoose.connection.close()
 })
