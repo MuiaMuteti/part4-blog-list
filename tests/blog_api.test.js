@@ -21,6 +21,14 @@ test('all notes are returned and in json format', async () => {
     assert.strictEqual(response.body.length, helper.initialBlogs.length)
 })
 
+test('blog has id property', async () => {
+    const response = await api.get('/api/blogs')
+    response.body.forEach(blog => {
+        assert(blog.hasOwnProperty('id'))
+        assert(!blog.hasOwnProperty('_id'))
+    })
+})
+
 after(async () => {
     await mongoose.connection.close()
 })
