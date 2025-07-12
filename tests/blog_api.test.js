@@ -114,6 +114,22 @@ describe('when there is initially some blogs saved', () => {
             assert.strictEqual(blogsAtEnd.length, helper.initialBlogs.length)
         })
     })
+    describe('updating of a blog', () => {
+        test('succeeds with valid data', async () => {
+            const blogsAtStart = await helper.blogsInDB()
+            const blogToUpdate = blogsAtStart[0]
+
+            blogToUpdate.title = 'Environment Variables'
+            blogToUpdate.likes = 9090
+
+            const updatedBlog = await api
+                .put(`/api/blogs/${blogToUpdate.id}`)
+                .send(blogToUpdate)
+                .expect(200)
+            
+            assert.deepStrictEqual(updatedBlog.body, blogToUpdate)
+        })
+    })
 })
 
 after(async () => {
